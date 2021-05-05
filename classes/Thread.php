@@ -22,17 +22,22 @@ class Thread
     public static $redis_timeout = 0.0;
     public static $redis_reserved = null;
     public static $redis_retry_interval = 0 ;
+    public static $cache_timeout="1200";
+    const CHANNEL_BASE_NAME = "thread";
+    const SAVE_BASE_NAME = "thread_serialize";
     public $result;
 
     public function __construct($function)
     {
         $this->function = $function;
-        $this->init_vars();
+        $this->id = Guidv4::create_guidv4();
     }
     public function start(){
-        $serializer = new Serializer();
-        $par = $serializer->serialize($this);
+        $key=$this->saveToRedis();
+        shell_exec("php {$this::$php_worker_path} '$key' > /dev/null & ");
+    }
 
+    public function redisConnect():\Redis{
         $redis = new \Redis();
         $redis->connect(
             self::$redis_host,
@@ -40,16 +45,17 @@ class Thread
             self::$redis_timeout,
             self::$redis_reserved,
             self::$redis_retry_interval );
-        $key=Guidv4::create_guidv4();
-        $redis->set($key,$par);
-        shell_exec("php {$this->php_worker_path} '$key' > /dev/null & ");
+        return $redis;
     }
 
     public function exec(){
+        $this->pid=getmypid();
         $function =$this->function;
         $result = $function();
         if(is_null($result)){
             $this->result = $result;
+            $this->publishEnd();
+            $this->saveToRedis();
         }
     }
 
@@ -69,6 +75,22 @@ class Thread
         } else {
             throw new \Exception('$obj is not Thread object, $obj->exec() not started');
         }
+    }
+
+    public function saveToRedis():string
+    {
+        $redis = $this->redisConnect();
+        $serializer = new Serializer();
+        $par = $serializer->serialize($this);
+        $key = self::SAVE_BASE_NAME.$this->id;
+        $redis->set($key,$par,self::$cache_timeout);
+        return $key;
+    }
+
+    public function publishEnd()
+    {
+        $redis = $this->redisConnect();
+        $redis->publish(self::CHANNEL_BASE_NAME.$this->id,'end');
     }
 
 }
