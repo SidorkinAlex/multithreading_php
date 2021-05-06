@@ -1,5 +1,5 @@
 {
-    "name": "SidorkinAlex/multithreading_php",
+    "name": "sidorkin-alex/multithreading_php",
     "type": "library",
     "description": "Serialize Closure objects, including their context and binding",
     "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
