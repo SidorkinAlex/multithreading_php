@@ -1,5 +1,5 @@
 {
-    "name": "sidorkin-alex/multithreading_php",
+    "name": "sidorkin-alex/multithreadingphp",
     "type": "library",
     "description": "Serialize Closure objects, including their context and binding",
     "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
@@ -14,8 +14,7 @@
         }
     ],
     "require": {
-        "jeremeamia/superclosure": "^2.4",
-        "php-redis": "^7.1",
+        "jeremeamia/superclosure": "^2.4",git
         "php": ">=7.1"
     },
     "autoload": {
