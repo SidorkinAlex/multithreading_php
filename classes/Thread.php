@@ -30,7 +30,8 @@ class Thread
 
     public function __construct($function)
     {
-        $this->function = $function;
+        $serializer = new Serializer();
+        $this->function  = $serializer->serialize($function);
         $this->id = Guidv4::create_guidv4();
     }
 
@@ -65,7 +66,8 @@ class Thread
      */
     public function exec(){
         $this->pid=getmypid();
-        $function =$this->function;
+        $serializer = new Serializer();
+        $function = $serializer->unserialize($this->function);
         $result = $function();
         if(!is_null($result)){
             $this->result = $result;
@@ -90,8 +92,7 @@ class Thread
             self::$redis_reserved,
             self::$redis_retry_interval );
         $var = $redis->get($key);
-        $serializer = new Serializer();
-        $obj = $serializer->unserialize($var);
+        $obj = unserialize($var);
         if($obj instanceof Thread){
             $obj->exec();
         } else {
@@ -108,7 +109,7 @@ class Thread
     {
         $redis = $this->redisConnect();
         $serializer = new Serializer();
-        $par = $serializer->serialize($this);
+        $par = serialize($this);
         $key = self::SAVE_BASE_NAME.$this->id;
         $redis->set($key,$par,self::$cache_timeout);
         return $key;
