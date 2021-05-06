@@ -1,7 +1,7 @@
 {
     "name": "sidorkin-alex/multithreadingphp",
     "type": "library",
-    "description": "Serialize Closure objects, including their context and binding",
+    "description": "multithreading in php by means of php-cli and Redis",
     "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
     "homepage": "https://github.com/SidorkinAlex/multithreading_php",
     "license": "MIT",
