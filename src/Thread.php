@@ -6,7 +6,7 @@
  * Time: 21:25
  */
 
-namespace App\Classes;
+namespace MultiThread;
 use SuperClosure\Serializer;
 
 

@@ -1,5 +1,26 @@
 {
+    "name": "SidorkinAlex/multithreading_php",
+    "type": "library",
+    "description": "Serialize Closure objects, including their context and binding",
+    "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
+    "homepage": "https://github.com/SidorkinAlex/multithreading_php",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sidorkin Alex",
+            "email": "sid88alex@yandex.ru",
+            "homepage": "https://github.com/SidorkinAlex",
+            "role": "Developer"
+        }
+    ],
     "require": {
-        "jeremeamia/superclosure": "^2.4"
+        "jeremeamia/superclosure": "^2.4",
+        "php-redis": "^7.1",
+        "php": ">=7.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "MultiThread\\": "src/"
+        }
     }
 }
