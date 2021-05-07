@@ -1,5 +1,5 @@
 # MultiThreading in php from  Redis + php-cli
-[![Latest Stable Version](https://poser.pugx.org/sidorkin-alex/multithreadingphp/v)](//packagist.org/packages/sidorkin-alex/multithreadingphp) [![Total Downloads](https://poser.pugx.org/sidorkin-alex/multithreadingphp/downloads)](//packagist.org/packages/sidorkin-alex/multithreadingphp) [![Latest Unstable Version](https://poser.pugx.org/sidorkin-alex/multithreadingphp/v/unstable)](//packagist.org/packages/sidorkin-alex/multithreadingphp) [![License](https://poser.pugx.org/sidorkin-alex/multithreadingphp/license)](//packagist.org/packages/sidorkin-alex/multithreadingphp)
+[![Latest Stable Version](https://poser.pugx.org/sidorkinalex/multiphp/v)](//packagist.org/packages/sidorkinalex/multiphp) [![Total Downloads](https://poser.pugx.org/sidorkinalex/multiphp/downloads)](//packagist.org/packages/sidorkinalex/multiphp) [![Latest Unstable Version](https://poser.pugx.org/sidorkinalex/multiphp/v/unstable)](//packagist.org/packages/sidorkinalex/multiphp) [![License](https://poser.pugx.org/sidorkinalex/multiphp/license)](//packagist.org/packages/sidorkinalex/multiphp)
 
 ```
 
