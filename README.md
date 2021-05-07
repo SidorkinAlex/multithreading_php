@@ -2,8 +2,9 @@
 
 ```
 
-$test = new Thread(function (){
-   for ($i = 0; $i<10; $i++){
+$n = 15;
+$test = new Thread($n,function ($n){
+   for ($i = 0; $i<$n; $i++){
        $pid=getmypid();
        file_put_contents('test.log', $i." my pid is {$pid} \n", FILE_APPEND);
        sleep(10);
