@@ -5,6 +5,7 @@
     "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
     "homepage": "https://github.com/SidorkinAlex/multithreading_php",
     "license": "MIT",
+    "version:": "2.0.0",
     "authors": [
         {
             "name": "Sidorkin Alex",
