@@ -1,5 +1,5 @@
 {
-    "name": "sidorkin-alex/multithreadingphp",
+    "name": "sidorkinalex/multiphp",
     "type": "library",
     "description": "multithreading in php by means of php-cli and Redis",
     "keywords": ["multithreading", "multithreading php", "cli", "php-cli"],
