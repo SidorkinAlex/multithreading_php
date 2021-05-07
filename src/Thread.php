@@ -17,6 +17,7 @@ class Thread
     public $id;
     public static $php_worker_path="/var/www/html/exec.php";
     public $function;
+    public $functionParams;
     public static $redis_host = "127.0.0.1";
     public static $redis_port = 6379;
     public static $redis_timeout = 0.0;
@@ -28,10 +29,11 @@ class Thread
     const FINAL_BASE_NAME = "thread_final";
     public $result;
 
-    public function __construct($function)
+    public function __construct($params=null,$function)
     {
         $serializer = new Serializer();
         $this->function  = $serializer->serialize($function);
+        $this->functionParams = $params;
         $this->id = Guidv4::create_guidv4();
     }
 
@@ -68,7 +70,11 @@ class Thread
         $this->pid=getmypid();
         $serializer = new Serializer();
         $function = $serializer->unserialize($this->function);
-        $result = $function();
+        if($this->functionParams !== null) {
+            $result = $function($this->functionParams);
+        } else {
+            $result = $function();
+        }
         if(!is_null($result)){
             $this->result = $result;
             $this->saveToRedis();
