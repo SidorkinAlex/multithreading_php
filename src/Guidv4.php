@@ -5,7 +5,7 @@
  * Date: 04.05.21
  * Time: 18:32
  */
-namespace MultiThread;
+namespace SidorkinAlex\Multiphp;
 class Guidv4 {
 
     public static function create_guidv4($data = null):string {

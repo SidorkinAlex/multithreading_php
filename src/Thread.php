@@ -6,7 +6,7 @@
  * Time: 21:25
  */
 
-namespace MultiThread;
+namespace SidorkinAlex\Multiphp;
 use SuperClosure\Serializer;
 
 
@@ -124,7 +124,7 @@ class Thread
     /**
      * getting the result of executing a stream from Redis.
      * получение результата выполнения потока из Redis.
-     * @return string
+     * @return
      */
     public function getResultFromRedis()
     {
@@ -132,14 +132,14 @@ class Thread
         $serializer = new Serializer();
         $key = self::SAVE_BASE_NAME.$this->id;
         $obj=$redis->get($key);
-        $par = $serializer->unserialize($obj);
+        $par = unserialize($obj);
         return $par->result;
     }
 
     /**
      * waiting for the thread to finish and getting its result
      * ожидание завершения работы потока и получение его результата
-     * @return result
+     * @return
      */
     public function getResult(){
         if(!$this->checkFinalise()){
@@ -197,7 +197,66 @@ class Thread
                 $redis->close();
             });
         } catch (Exception $e){
+            $redis->close();
+        }
+    }
 
+    /**
+     * getting the result of the stream cyclically (high reliability, but more resource consumption)
+     * получение результата потока циклично (высокая надежность, но большее потребление ресурсов)
+     * @param int $waitingTimeThreadCompletion milliseconds
+     * maximum thread waiting time if you specify 0 then there is no waiting time limit
+     * максимальное время ожитания потока если указать 0 то ограничение по времени ожидания отсутствует
+     * @param int $cyclicalSleepTime milliseconds
+     * time step in milliseconds through which the completion of the stream is checked
+     *временной шаг в миллисекундах через который происходит проверка завершения потока
+     * @return
+     */
+    public function getCyclicalResult(int $waitingTimeThreadCompletion=0, int $cyclicalSleepTime=100){
+        if($waitingTimeThreadCompletion === 0 ){
+            $this->waitingCyclicalFinish($cyclicalSleepTime);
+        } else {
+            $cyclicalCount = ceil($waitingTimeThreadCompletion/$cyclicalSleepTime);
+
+            $this->waitingCyclicalCountFinish($cyclicalSleepTime,$cyclicalCount);
+        }
+        return $this->getResultFromRedis();
+    }
+
+    /**loop check by key in radish whether the stream is complete
+     * циклическая проверка по ключу в редисе завершен ли поток
+     * @param int $cyclicalSleepTime milliseconds
+     */
+    public function waitingCyclicalFinish(int $cyclicalSleepTime)
+    {
+        ini_set('max_execution_time', '300');
+        $redis = $this->redisConnect();
+        $key = self::FINAL_BASE_NAME.$this->id;
+        while (true ){
+            if($redis->get($key) == 'true'){
+                break;
+            }
+            usleep($cyclicalSleepTime);
+        }
+    }
+
+    /**
+     * loop check by key in radish whether the stream with loop limitation is completed
+     * циклическая проверка по ключу в редисе завершен ли поток с ограничением циклов
+     * @param int $cyclicalSleepTime milliseconds
+     * @param int $cyclicalCount count
+     */
+    public function waitingCyclicalCountFinish(int $cyclicalSleepTime, int $cyclicalCount)
+    {
+        $redis = $this->redisConnect();
+        $key = self::FINAL_BASE_NAME.$this->id;
+        $i = 0;
+
+        while ($i <= $cyclicalCount){
+            if($redis->get($key) == 'true'){
+                break;
+            }
+            usleep($cyclicalSleepTime);
         }
     }
 
