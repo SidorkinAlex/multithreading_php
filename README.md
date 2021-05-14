@@ -137,6 +137,10 @@ public function testpars(Request $request): Response
     }
 ```
 
+Example 2 shows the code that implements the start of sending emails. the execution of the testpars method is completed by running the $EmailSendlerThread thread and does not wait for its execution.
+  
+ Therefore, the response to such a request will be very fast, the main thread will not wait for the $EmailSendlerThread thread to finish, but will simply return {"status" : "ok"}  to the initiator.
+
 
 # Многопоточность на PHP с помошбю Redis + php-cli
 
@@ -277,3 +281,5 @@ public function testpars(Request $request): Response
 В примере 2 представлен код который реализует запуск отправки писем. выполнение метода testpars завершается запуском потока $EmailSendlerThread и не ждет его выполнения.
   
  Поэтому ответ на подобный запрос будет очень быстрым основной поток не будет ждать завершения работы потока $EmailSendlerThread а просто вернет {"status" : "ok"}  инициатору.
+ 
+ 
