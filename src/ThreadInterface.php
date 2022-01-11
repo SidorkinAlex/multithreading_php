@@ -27,10 +27,9 @@ interface ThreadInterface
     /**
      * a static method to be called in the cli script that will act as a thread.
      * статический метод, который нужно вызывать в cli скрипте, который будет выполнять роль потока.
-     * @param $key
      * @throws \Exception
      */
-    public static function shell_start($key);
+    public static function shell_start();
 
     /**
      * getting the result of the stream cyclically (high reliability, but more resource consumption)

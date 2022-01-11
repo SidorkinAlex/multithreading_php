@@ -13,7 +13,6 @@ use SuperClosure\Serializer;
 
 class Thread implements ThreadInterface
 {
-    public $pid;
     public $id;
     public static $php_worker_path = "/var/www/html/exec.php";
     public $function;
@@ -39,7 +38,6 @@ class Thread implements ThreadInterface
         $serializer = new Serializer();
         $this->function = $serializer->serialize($function);
         $this->functionParams = $params;
-        $this->id = Guidv4::create_guidv4();
     }
 
     /**
@@ -49,7 +47,9 @@ class Thread implements ThreadInterface
     public function start()
     {
         $key = $this->saveToRedis();
-        shell_exec("php {$this::$php_worker_path} '$key' > /dev/null & ");
+        $this->id = shell_exec("php {$this::$php_worker_path}  > /dev/null & echo $!");
+
+        return $this->id;
     }
 
     /**
@@ -75,7 +75,7 @@ class Thread implements ThreadInterface
      */
     protected function exec()
     {
-        $this->pid = getmypid();
+        $this->id = getmypid();
         $serializer = new Serializer();
         $function = $serializer->unserialize($this->function);
         if ($this->functionParams !== null) {
@@ -94,11 +94,12 @@ class Thread implements ThreadInterface
     /**
      * a static method to be called in the cli script that will act as a thread.
      * статический метод, который нужно вызывать в cli скрипте, который будет выполнять роль потока.
-     * @param $key
      * @throws \Exception
      */
-    public static function shell_start($key)
+    public static function shell_start()
     {
+        $key = getmypid();
+
         $redis = new \Redis();
         $redis->connect(
             self::$redis_host,
